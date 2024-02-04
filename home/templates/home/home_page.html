@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 <!-- load wagtailcore_tags by adding this: -->
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
 {% block body_class %}template-homepage{% endblock %}
 
@@ -17,8 +17,8 @@
                     <div class="logo">
                         {% for item in page.logo.all %}
                             <a href="#">
-                            {% image item.image fill-64x64-c100 class='logo' %}
-                        </a>
+                                {% image item.image fill-64x64-c100 class='logo' %}
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
@@ -95,22 +95,9 @@
                 <div class="social-share-style-1 mt--40">
                     <span class="title">find with me</span>
                     <ul class="social-share d-flex liststyle">
-                        <li class="facebook"><a href="{{ page.facebook_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook">
-                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-                                </svg></a>
-                        </li>
-                        <li class="instagram"><a href="{{ page.instagram_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                                </svg></a>
-                        </li>
-                        <li class="linkedin"><a href="{{ page.linkedin_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-linkedin">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                                    <rect x="2" y="9" width="4" height="12"></rect>
-                                    <circle cx="4" cy="4" r="2"></circle>
-                                </svg></a>
-                        </li>
+                        {%  for item in page.socialmedia.all %}
+                            <li class="facebook"><a href="{{ item.url }}">{% image item.logo fill-32x32-c100 %}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <!-- end -->
@@ -153,10 +140,7 @@
                                     </h1>
 
                                     <div>
-                                        <p class="description">I use animation as a third dimension by which to simplify
-                                            experiences and kuiding thro each and every interaction. I’m not adding
-                                            motion
-                                            just to spruce things up, but doing it in ways that.</p>
+                                        <p class="description">{{ page.intro }}</p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -164,12 +148,9 @@
                                         <div class="social-share-inner-left">
                                             <span class="title">find with me</span>
                                             <ul class="social-share d-flex liststyle">
-                                                <li class="facebook"><a href="#"><i data-feather="facebook"></i></a>
-                                                </li>
-                                                <li class="instagram"><a href="#"><i data-feather="instagram"></i></a>
-                                                </li>
-                                                <li class="linkedin"><a href="#"><i data-feather="linkedin"></i></a>
-                                                </li>
+                                                {%  for item in page.socialmedia.all %}
+                                                    <li class="facebook"><a href="{{ item.url }}">{% image item.logo fill-32x32-c100 %}</a></li>
+                                                {% endfor %}
                                             </ul>
                                         </div>
                                     </div>
@@ -177,9 +158,9 @@
                                         <div class="skill-share-inner">
                                             <span class="title">best skill on</span>
                                             <ul class="skill-share d-flex liststyle">
-                                                <li><img src="assets/images/icons/icons-01.png" alt="Icons Images"></li>
-                                                <li><img src="assets/images/icons/icons-02.png" alt="Icons Images"></li>
-                                                <li><img src="assets/images/icons/icons-03.png" alt="Icons Images"></li>
+                                                {% for item in page.skills.all %}
+                                                    <li>{% image item.logo fill-32x32-c100 %}</li>
+                                                {% endfor %}
                                             </ul>
                                         </div>
                                     </div>
@@ -190,7 +171,7 @@
                         <div class="order-1 order-lg-2 col-lg-5">
                             <div class="thumbnail">
                                 <div class="inner">
-                                    <img src="assets/images/slider/banner-01.png" alt="Personal Portfolio Images">
+                                    {% image page.profile_pic fill-500x960 %}
                                 </div>
                             </div>
                         </div>
@@ -199,6 +180,58 @@
             </div>
         </div>
         <!-- End Slider Area -->
+
+
+        <!-- Start Service Area -->
+        <div class="rn-service-area rn-section-gap section-separator" id="features">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title text-left" data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true">
+                            <span class="subtitle">Features</span>
+                            <h2 class="title">What I Do</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row--25 mt_md--10 mt_sm--10">
+                    <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true" class="col-lg-6 col-xl-4 col-md-6 col-sm-12 col-12 mt--50 mt_md--30 mt_sm--30">
+                        <div class="rn-service">
+                            {%  for item in page.whatido.all %}
+                                <div class="inner">
+                                    <div class="icon">
+                                        {% image item.icon fill-64x64 %}
+{#                                        <i data-feather="menu"></i>#}
+                                    </div>
+                                    <div class="content">
+                                        <h4 class="title"><a href="#">{{ item.title }}</a></h4>
+                                        <p class="description">{{ item.content }}</p>
+                                        <a class="read-more-button" href="#"><i class="feather-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                                <a class="over-link" href="#"></a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Service Area  -->
+
+        <!-- Start Resume Area -->
+        <div class="rn-resume-area rn-section-gap section-separator" id="resume">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title text-center">
+                            <span class="subtitle">{{ page.years_of_exp }} Years of Experience</span>
+                            <h2 class="title">My Resume</h2>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
     </main>
 
     <!-- Start Main Page Wrapper -->
