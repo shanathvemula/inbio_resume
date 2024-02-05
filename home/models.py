@@ -6,7 +6,7 @@ from modelcluster.fields import ParentalKey
 
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField, BlockField
-from wagtail.admin.panels import FieldPanel, InlinePanel
+from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 
 from wagtail.search import index
 
@@ -39,12 +39,15 @@ class HomePage(Page):
         InlinePanel('logo', label="logo image"),
         InlinePanel('socialmedia', label='SocialMedia'),
         InlinePanel('skills', label='Skills'),
-        InlinePanel('whatido', label='whatido')
+        InlinePanel('whatido', label='What I Do'),
+        InlinePanel('portfolio', label='Portfolio'),
+        InlinePanel('education', label='Education Details')
     ]
 
     def clean(self):
         self.short_intro = self.short_intro.strip()  # Remove leading and trailing whitespace
         self.short_intro = re.sub(r'<.*?>', '', self.short_intro)  # Remove HTML tags
+        self.short_intro = self.short_intro.replace('&#x27;', "'")
         self.intro = self.intro.strip()
         self.intro = re.sub(r'<.*?>', '', self.intro)
         self.subtitle = self.subtitle.strip()
@@ -114,4 +117,64 @@ class WhatIDo(Orderable):
         self.title = self.title.strip()  # Remove leading and trailing whitespace
         self.title = re.sub(r'<.*?>', '', self.title)  # Remove HTML tags
         self.content = self.content.strip()
-        self.content = re.sub(r'<.*?>','', self.content)
+        self.content = re.sub(r'<.*?>', '', self.content)
+
+
+class Portfolio(Orderable):
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='portfolio')
+    portfolio_logo = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
+    type = RichTextField()
+    project_title = RichTextField()
+    description = RichTextField()
+    description2 = RichTextField(blank=True)
+    project_link = models.URLField()
+
+    # panel = [FieldPanel('logo'), FieldPanel('type'), FieldPanel('liked'), FieldPanel('title'),
+    #          FieldPanel('description'), FieldPanel('project_link')]
+    panels = [FieldPanel('portfolio_logo'), FieldPanel('type'), FieldPanel('project_title'),
+              FieldPanel('description'), FieldPanel('project_link')]
+
+    def clean(self):
+        self.type = self.type.strip()  # Remove leading and trailing whitespace
+        self.type = re.sub(r'<.*?>', '', self.type)  # Remove HTML tags
+        self.project_title = self.project_title.strip()
+        self.project_title = re.sub(r'<.*?>', '', self.project_title)
+        self.project_title = self.project_title.replace('&amp;', '&')
+        self.description = self.description.strip()
+        self.description = re.sub(r'<.*?>', '', self.description)
+
+
+class Education(Orderable):
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='education')
+    qualification = RichTextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    university = RichTextField()
+    university_address = RichTextField()
+    completed = models.BooleanField()
+    percentage = models.FloatField()
+    # about_university = RichTextField()
+
+    panels = [FieldPanel('qualification'), FieldPanel('start_date'), FieldPanel('end_date'), FieldPanel('university'),
+              FieldPanel('university_address'), FieldPanel('completed'), FieldPanel('percentage')]
+
+    def get_context(self, request):
+        # Update context to include only published posts, ordered by reverse-chron
+        context = super().get_context(request)
+        blogpages = self.get_children().live().order_by('-end_date')
+        context['blogpages'] = blogpages
+        return context
+
+    def clean(self):
+        self.university = self.university.strip()  # Remove leading and trailing whitespace
+        self.university = re.sub(r'<.*?>', '', self.university)  # Remove HTML tags
+        self.university = self.university.replace('&amp;', '&')
+        self.qualification = self.qualification.strip()
+        self.qualification = re.sub(r'<.*?>', '', self.qualification)
+        self.qualification = self.qualification.replace('&amp;', '&')
+        # self.about_university = self.about_university.strip()
+        # self.about_university = re.sub(r'<.*>?', '', self.about_university)
+
+
+class Professional(Orderable):
+    pass

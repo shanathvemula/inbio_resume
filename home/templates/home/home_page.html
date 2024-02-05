@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load mathfilters %}
 <!-- load wagtailcore_tags by adding this: -->
 {% load static wagtailcore_tags wagtailimages_tags %}
 
@@ -31,7 +31,9 @@
                         <!-- Start Mainmanu Nav -->
                         <ul class="primary-menu nav nav-pills">
                             <li class="nav-item current"><a class="nav-link" href="#home">Home</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                            {%  if page.whatido.count >= 1 %}
+                                <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                            {% endif %}
                             <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
                             <li class="nav-item"><a class="nav-link" href="#resume">Resume</a></li>
                             <li class="nav-item"><a class="nav-link" href="#clients">Clients</a></li>
@@ -83,7 +85,9 @@
             <div class="content">
                 <ul class="primary-menu nav nav-pills onepagenav">
                     <li class="nav-item current"><a class="nav-link smoth-animation active" href="#home">Home</a></li>
-                    <li class="nav-item"><a class="nav-link smoth-animation" href="#features">Features</a></li>
+                    {%  if page.whatido.count >= 1 %}
+                        <li class="nav-item"><a class="nav-link smoth-animation" href="#features">Features</a></li>
+                    {% endif %}
                     <li class="nav-item"><a class="nav-link smoth-animation" href="#portfolio">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link smoth-animation" href="#resume">Resume</a></li>
                     <li class="nav-item"><a class="nav-link smoth-animation" href="#clients">Clients</a></li>
@@ -184,38 +188,87 @@
 
         <!-- Start Service Area -->
         <div class="rn-service-area rn-section-gap section-separator" id="features">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-title text-left" data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true">
-                            <span class="subtitle">Features</span>
-                            <h2 class="title">What I Do</h2>
+            {%  if page.whatido.count >= 1 %}
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="section-title text-left" data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true">
+                                <span class="subtitle">Features</span>
+                                <h2 class="title">What I Do</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row--25 mt_md--10 mt_sm--10">
+                        <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true" class="col-lg-6 col-xl-4 col-md-6 col-sm-12 col-12 mt--50 mt_md--30 mt_sm--30">
+                            <div class="rn-service">
+                                {%  for item in page.whatido.all %}
+                                    <div class="inner">
+                                        <div class="icon">
+                                            {% image item.icon fill-64x64 %}
+    {#                                        <i data-feather="menu"></i>#}
+                                        </div>
+                                        <div class="content">
+                                            <h4 class="title"><a href="#">{{ item.title }}</a></h4>
+                                            <p class="description">{{ item.content }}</p>
+                                            <a class="read-more-button" href="#"><i class="feather-arrow-right"></i></a>
+                                        </div>
+                                    </div>
+                                    <a class="over-link" href="#"></a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="row row--25 mt_md--10 mt_sm--10">
-                    <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true" class="col-lg-6 col-xl-4 col-md-6 col-sm-12 col-12 mt--50 mt_md--30 mt_sm--30">
-                        <div class="rn-service">
-                            {%  for item in page.whatido.all %}
-                                <div class="inner">
-                                    <div class="icon">
-                                        {% image item.icon fill-64x64 %}
-{#                                        <i data-feather="menu"></i>#}
-                                    </div>
-                                    <div class="content">
-                                        <h4 class="title"><a href="#">{{ item.title }}</a></h4>
-                                        <p class="description">{{ item.content }}</p>
-                                        <a class="read-more-button" href="#"><i class="feather-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                                <a class="over-link" href="#"></a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endif %}
         </div>
         <!-- End Service Area  -->
+
+        <!-- Start Portfolio Area -->
+        {%  if page.portfolio.count >= 1 %}
+            <div class="rn-portfolio-area rn-section-gap section-separator" id="portfolio">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="section-title text-center">
+                                <span class="subtitle">Visit my portfolio and keep your feedback</span>
+                                <h2 class="title">My Portfolio</h2>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row row--25 mt--10 mt_md--10 mt_sm--10">
+                    {% for item in page.portfolio.all %}
+                        <!-- Start Single Portfolio -->
+                        <div data-aos="fade-up" data-aos-delay="100" data-aos-once="true" class="col-lg-6 col-xl-4 col-md-6 col-12 mt--50 mt_md--30 mt_sm--30">
+                            <div class="rn-portfolio" data-bs-toggle="modal" data-bs-target="#exampleModalCenter">
+                                <div class="inner">
+                                    <div class="thumbnail">
+                                        <a href="javascript:void(0)">
+                                            {% image item.portfolio_logo fill-64x64 %}
+        {#                                        <img src="assets/images/portfolio/portfolio-01.jpg" alt="Personal Portfolio Images">#}
+                                        </a>
+                                    </div>
+                                    <div class="content">
+                                        <div class="category-info">
+                                            <div class="category-list">
+                                                <a href="javascript:void(0)">{{ item.type }}</a>
+                                            </div>
+        {#                                        <div class="meta">#}
+        {#                                            <span><a href="javascript:void(0)"><i class="feather-heart"></i></a>#}
+        {#                                        {{ item.likes }}</span>#}
+        {#                                        </div>#}
+                                        </div>
+                                        <h4 class="title"><a href="javascript:void(0)">{{ item.project_title}} <i
+                                            class="feather-arrow-up-right"></i></a></h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Single Portfolio -->
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+        <!-- End portfolio Area -->
 
         <!-- Start Resume Area -->
         <div class="rn-resume-area rn-section-gap section-separator" id="resume">
@@ -228,6 +281,104 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mt--45">
+                    <div class="col-lg-12">
+                        <ul class="rn-nav-list nav nav-tabs" id="myTabs" role="tablist">
+                            {%  if page.education.count >= 1 %}
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="education-tab" data-bs-toggle="tab" href="#education" role="tab" aria-controls="education" aria-selected="true">education</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" id="professional-tab" data-bs-toggle="tab" href="#professional" role="tab" aria-controls="professional" aria-selected="false">professional
+                                    Skills</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="experience-tab" data-bs-toggle="tab" href="#experience" role="tab" aria-controls="experience" aria-selected="false">experience</a>
+                            </li>
+{#                            <li class="nav-item">#}
+{#                                <a class="nav-link" id="interview-tab" data-bs-toggle="tab" href="#interview" role="tab" aria-controls="interview" aria-selected="false">interview</a>#}
+{#                            </li>#}
+                        </ul>
+                        <!-- Start Tab Content Wrapper  -->
+                        <div class="rn-nav-content tab-content" id="myTabContents">
+                            <!-- Start education Tab  -->
+                            {%  if page.education.count >= 1 %}
+                                <div class="tab-pane show active fade single-tab-area" id="education" role="tabpanel" aria-labelledby="education-tab">
+                                    <div class="personal-experience-inner mt--40">
+                                        <div class="row">
+                                            <div class="content"><h4 class="maintitle">Education Qualification</h4></div>
+                                            {%  for item in page.education.all %}
+                                            <!-- Start Skill List Area  -->
+                                            <div class="col-lg-6 col-md-12 col-12">
+                                                <div class="content">
+                                                    <div class="experience-list">
+                                                        {% if item.id|div:2  %}
+                                                            <!-- Start Single List  -->
+                                                            <div class="resume-single-list">
+                                                                <div class="inner">
+                                                                    <div class="heading">
+                                                                        <div class="title">
+                                                                            <h4>{{ item.qualification }}</h4>
+                                                                            <span>{{ item.university}}</span>
+                                                                            <br>
+                                                                            <div class="date-of-time">
+                                                                                {% if item.completed %}
+                                                                                    <span>Secured with {{ item.percentage }}%</span>
+                                                                                {% else %}
+                                                                                    <span>Aggregate of {{ item.percentage }}%</span>
+                                                                                {% endif %}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="date-of-time">
+                                                                            <span>{{ item.start_date.year }} - {{ item.end_date.year }}</span><br>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <p class="description">{{ item.about }}</p>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End Single List  -->
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- End Skill List Area  -->
+                                            {%  endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <!-- End education Tab  -->
+
+                            <!-- Start professional Tab  -->
+                            <div class="tab-pane fade " id="professional" role="tabpanel" aria-labelledby="professional-tab">
+                                <div class="personal-experience-inner mt--40">
+                                    <div class="row row--40">
+                                        <!-- Start Single Progressbar  -->
+                                        <div class="col-lg-6 col-md-6 col-12">
+                                            <div class="progress-wrapper">
+                                                <div class="content">
+                                                    <span class="subtitle">Features</span>
+                                                    <h4 class="maintitle">Design Skill</h4>
+                                                    <!-- Start Single Progress Charts -->
+                                                    <div class="progress-charts">
+                                                        <h6 class="heading heading-h6">PHOTOSHOT</h6>
+                                                        <div class="progress">
+                                                            <div class="progress-bar wow fadeInLeft" data-wow-duration="0.5s" data-wow-delay=".3s" role="progressbar" style="width: 100%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span
+                                                            class="percent-label">100%</span></div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Single Progress Charts -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                    </div>
 
 
             </div>
