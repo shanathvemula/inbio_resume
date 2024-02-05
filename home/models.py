@@ -7,6 +7,7 @@ from modelcluster.fields import ParentalKey
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField, BlockField
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from wagtail.search import index
 
@@ -41,7 +42,8 @@ class HomePage(Page):
         InlinePanel('skills', label='Skills'),
         InlinePanel('whatido', label='What I Do'),
         InlinePanel('portfolio', label='Portfolio'),
-        InlinePanel('education', label='Education Details')
+        InlinePanel('education', label='Education Details'),
+        InlinePanel('professional', label='Professional Skills')
     ]
 
     def clean(self):
@@ -177,4 +179,12 @@ class Education(Orderable):
 
 
 class Professional(Orderable):
-    pass
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='professional')
+    skill_name = RichTextField()
+    how_much_percentage = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
+
+    panels = [FieldPanel('skill_name'), FieldPanel('how_much_percentage')]
+
+    def clean(self):
+        self.skill_name = self.skill_name.strip()  # Remove leading and trailing whitespace
+        self.skill_name = re.sub(r'<.*?>', '', self.skill_name)  # Remove HTML tags

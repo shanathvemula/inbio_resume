@@ -289,10 +289,12 @@
                                     <a class="nav-link active" id="education-tab" data-bs-toggle="tab" href="#education" role="tab" aria-controls="education" aria-selected="true">education</a>
                                 </li>
                             {% endif %}
-                            <li class="nav-item">
-                                <a class="nav-link" id="professional-tab" data-bs-toggle="tab" href="#professional" role="tab" aria-controls="professional" aria-selected="false">professional
-                                    Skills</a>
-                            </li>
+                            {%  if page.professional.count >= 1 %}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="professional-tab" data-bs-toggle="tab" href="#professional" role="tab" aria-controls="professional" aria-selected="false">professional
+                                        Skills</a>
+                                </li>
+                            {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link" id="experience-tab" data-bs-toggle="tab" href="#experience" role="tab" aria-controls="experience" aria-selected="false">experience</a>
                             </li>
@@ -331,11 +333,9 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="date-of-time">
-                                                                            <span>{{ item.start_date.year }} - {{ item.end_date.year }}</span><br>
-
+                                                                            <span>{{ item.start_date.year }} - </span><span>{{ item.end_date.year }}</span><br>
                                                                         </div>
                                                                     </div>
-                                                                    <p class="description">{{ item.about }}</p>
                                                                 </div>
                                                             </div>
                                                             <!-- End Single List  -->
@@ -352,30 +352,36 @@
                             <!-- End education Tab  -->
 
                             <!-- Start professional Tab  -->
-                            <div class="tab-pane fade " id="professional" role="tabpanel" aria-labelledby="professional-tab">
-                                <div class="personal-experience-inner mt--40">
-                                    <div class="row row--40">
-                                        <!-- Start Single Progressbar  -->
-                                        <div class="col-lg-6 col-md-6 col-12">
-                                            <div class="progress-wrapper">
-                                                <div class="content">
-                                                    <span class="subtitle">Features</span>
-                                                    <h4 class="maintitle">Design Skill</h4>
-                                                    <!-- Start Single Progress Charts -->
-                                                    <div class="progress-charts">
-                                                        <h6 class="heading heading-h6">PHOTOSHOT</h6>
-                                                        <div class="progress">
-                                                            <div class="progress-bar wow fadeInLeft" data-wow-duration="0.5s" data-wow-delay=".3s" role="progressbar" style="width: 100%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"><span
-                                                            class="percent-label">100%</span></div>
+                                <div class="tab-pane fade " id="professional" role="tabpanel" aria-labelledby="professional-tab">
+                                    <div class="personal-experience-inner mt--40">
+                                        <div class="row row--40">
+                                            <!-- Start Single Progressbar  -->
+                                            {%  if page.professional.count >= 1 %}
+                                                {% for item in page.professional.all %}
+                                                <div class="col-lg-6 col-md-6 col-12">
+                                                    <div class="progress-wrapper">
+                                                        <div class="content">
+                                                            <span class="subtitle">Features</span>
+                                                            <h4 class="maintitle">Professional Skills</h4>
+                                                            <!-- Start Single Progress Charts -->
+
+                                                                <div class="progress-charts">
+                                                                    <h6 class="heading heading-h6">{{ item.skill_name }}</h6>
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar wow fadeInLeft" data-wow-duration="0.5s" data-wow-delay=".3s" role="progressbar" style="width: {{ item.how_much_percentage }}%" aria-valuenow="{{ item.how_much_percentage }}" aria-valuemin="0" aria-valuemax="100"><span
+                                                                        class="percent-label">{{ item.how_much_percentage }}%</span></div>
+                                                                    </div>
+                                                                </div>
+
+                                                            <!-- End Single Progress Charts -->
                                                         </div>
                                                     </div>
-                                                    <!-- End Single Progress Charts -->
                                                 </div>
-                                            </div>
+                                                {% endfor %}
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
 
                     </div>
