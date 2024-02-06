@@ -37,13 +37,14 @@ class HomePage(Page):
         FieldPanel('profile_pic'),
         FieldPanel('years_of_exp'),
         FieldPanel('name'), FieldPanel('role1'), FieldPanel('role2'), FieldPanel('role3'),
-        InlinePanel('logo', label="logo image"),
+        InlinePanel('logo', label="Logo Image"),
         InlinePanel('socialmedia', label='SocialMedia'),
         InlinePanel('skills', label='Skills'),
         InlinePanel('whatido', label='What I Do'),
         InlinePanel('portfolio', label='Portfolio'),
         InlinePanel('education', label='Education Details'),
-        InlinePanel('professional', label='Professional Skills')
+        InlinePanel('professional', label='Professional Skills'),
+        InlinePanel('experience', label='Experience')
     ]
 
     def clean(self):
@@ -155,7 +156,6 @@ class Education(Orderable):
     university_address = RichTextField()
     completed = models.BooleanField()
     percentage = models.FloatField()
-    # about_university = RichTextField()
 
     panels = [FieldPanel('qualification'), FieldPanel('start_date'), FieldPanel('end_date'), FieldPanel('university'),
               FieldPanel('university_address'), FieldPanel('completed'), FieldPanel('percentage')]
@@ -188,3 +188,23 @@ class Professional(Orderable):
     def clean(self):
         self.skill_name = self.skill_name.strip()  # Remove leading and trailing whitespace
         self.skill_name = re.sub(r'<.*?>', '', self.skill_name)  # Remove HTML tags
+
+
+class Experience(Orderable):
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='experience')
+    company_name = RichTextField()
+    designation = RichTextField()
+    start_date = models.DateField()
+    end_date = models.DateField(blank=True, null=True)
+    responsibilities = RichTextField()
+
+    panels = [FieldPanel('company_name'), FieldPanel('designation'), FieldPanel('start_date'), FieldPanel('end_date'),
+              FieldPanel('responsibilities')]
+
+    def clean(self):
+        self.designation = self.designation.strip()  # Remove leading and trailing whitespace
+        self.designation = re.sub(r'<.*?>', '', self.designation)  # Remove HTML tags
+        self.company_name = self.company_name.strip()
+        self.company_name = re.sub(r'<.*?>', '', self.company_name)
+        self.responsibilities = self.responsibilities.strip()
+        self.responsibilities = re.sub(r'<.*?>', '', self.responsibilities)

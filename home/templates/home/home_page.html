@@ -199,9 +199,9 @@
                         </div>
                     </div>
                     <div class="row row--25 mt_md--10 mt_sm--10">
-                        <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true" class="col-lg-6 col-xl-4 col-md-6 col-sm-12 col-12 mt--50 mt_md--30 mt_sm--30">
-                            <div class="rn-service">
-                                {%  for item in page.whatido.all %}
+                        {%  for item in page.whatido.all %}
+                            <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true" class="col-lg-6 col-xl-4 col-md-6 col-sm-12 col-12 mt--50 mt_md--30 mt_sm--30">
+                                <div class="rn-service">
                                     <div class="inner">
                                         <div class="icon">
                                             {% image item.icon fill-64x64 %}
@@ -214,9 +214,9 @@
                                         </div>
                                     </div>
                                     <a class="over-link" href="#"></a>
-                                {% endfor %}
+                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             {% endif %}
@@ -295,9 +295,11 @@
                                         Skills</a>
                                 </li>
                             {% endif %}
-                            <li class="nav-item">
-                                <a class="nav-link" id="experience-tab" data-bs-toggle="tab" href="#experience" role="tab" aria-controls="experience" aria-selected="false">experience</a>
-                            </li>
+                            {% if page.experience.count >= 1 %}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="experience-tab" data-bs-toggle="tab" href="#experience" role="tab" aria-controls="experience" aria-selected="false">experience</a>
+                                </li>
+                            {% endif %}
 {#                            <li class="nav-item">#}
 {#                                <a class="nav-link" id="interview-tab" data-bs-toggle="tab" href="#interview" role="tab" aria-controls="interview" aria-selected="false">interview</a>#}
 {#                            </li>#}
@@ -361,7 +363,7 @@
                                                 <div class="col-lg-6 col-md-6 col-12">
                                                     <div class="progress-wrapper">
                                                         <div class="content">
-                                                            <span class="subtitle">Features</span>
+{#                                                            <span class="subtitle">Features</span>#}
                                                             <h4 class="maintitle">Professional Skills</h4>
                                                             <!-- Start Single Progress Charts -->
 
@@ -382,13 +384,50 @@
                                         </div>
                                     </div>
                                 </div>
+                            <!-- End Single Progressbar  -->
 
+                            <div class="tab-pane fade" id="experience" role="tabpanel" aria-labelledby="experience-tab">
+                                <div class="personal-experience-inner mt--40">
+                                    <div class="row">
+                                        {%  if page.experience.count >= 1 %}
+                                            {% for item in page.experience.all %}
+                                                <!-- Start Skill List Area  -->
+                                                <div class="col-lg-6 col-md-12 col-12">
+                                                    <div class="content">
+{#                                                        <span class="subtitle">2007 - 2010</span>#}
+                                                        <h4 class="maintitle">Experience</h4>
+                                                        <div class="experience-list">
 
+                                                            <!-- Start Single List  -->
+                                                            <div class="resume-single-list">
+                                                                <div class="inner">
+                                                                    <div class="heading">
+                                                                        <div class="title">
+                                                                            <h4>{{ item.designation }}</h4>
+                                                                            <span>{{ item.company_name }}</span>
+                                                                        </div>
+{#                                                                        <div class="date-of-time">#}
+{#                                                                            <span>4.30/5</span>#}
+{#                                                                        </div>#}
+                                                                        <p>{{ item.start_date }} - {{ item.end_date }}</p>
+                                                                    </div>
+                                                                    <p class="description">{{ item.responsibilities }}</p>
+                                                                </div>
+                                                            </div>
+                                                            <!-- End Single List  -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                        </div>
                     </div>
-
+                </div>
 
             </div>
         </div>
+        <!-- End Resume Area -->
     </main>
 
     <!-- Start Main Page Wrapper -->
