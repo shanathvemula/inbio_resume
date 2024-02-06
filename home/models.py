@@ -44,7 +44,8 @@ class HomePage(Page):
         InlinePanel('portfolio', label='Portfolio'),
         InlinePanel('education', label='Education Details'),
         InlinePanel('professional', label='Professional Skills'),
-        InlinePanel('experience', label='Experience')
+        InlinePanel('experience', label='Experience'),
+        InlinePanel('testimonial', label='Testimonial')
     ]
 
     def clean(self):
@@ -208,3 +209,32 @@ class Experience(Orderable):
         self.company_name = re.sub(r'<.*?>', '', self.company_name)
         self.responsibilities = self.responsibilities.strip()
         self.responsibilities = re.sub(r'<.*?>', '', self.responsibilities)
+
+
+class Testimonial(Orderable):
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='testimonial')
+    thumbnail = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
+    subtitle = RichTextField()
+    title = RichTextField()
+    designation = RichTextField()
+    app_name = RichTextField()
+    app_date = RichTextField()
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    description = RichTextField()
+
+    panel = [FieldPanel('thumbnail'), FieldPanel('subtitle'), FieldPanel('title'), FieldPanel('designation'),
+             FieldPanel('app_name'), FieldPanel('app_date'), FieldPanel('rating'), FieldPanel('description')]
+
+    def clean(self):
+        self.subtitle = self.subtitle.strip()  # Remove leading and trailing whitespace
+        self.subtitle = re.sub(r'<.*?>', '', self.subtitle)  # Remove HTML tags
+        self.title = self.title.strip()
+        self.title = re.sub(r'<.*?>', '', self.title)
+        self.designation = self.designation.strip()
+        self.designation = re.sub(r'<.*?>', '', self.designation)
+        self.app_name = self.app_name.strip()
+        self.app_name = re.sub(r'<.*?>', '', self.app_name)
+        self.app_date = self.app_date.strip()
+        self.app_date = re.sub(r'<.*?>', '', self.app_date)
+        self.description = self.description.strip()
+        self.description = re.sub(r'<.*?>', '', self.description)

@@ -358,13 +358,14 @@
                                     <div class="personal-experience-inner mt--40">
                                         <div class="row row--40">
                                             <!-- Start Single Progressbar  -->
+                                        <h5 class="maintitle" style="color: black">Professional Skills</h5>
                                             {%  if page.professional.count >= 1 %}
                                                 {% for item in page.professional.all %}
                                                 <div class="col-lg-6 col-md-6 col-12">
                                                     <div class="progress-wrapper">
                                                         <div class="content">
 {#                                                            <span class="subtitle">Features</span>#}
-                                                            <h4 class="maintitle">Professional Skills</h4>
+
                                                             <!-- Start Single Progress Charts -->
 
                                                                 <div class="progress-charts">
@@ -420,14 +421,82 @@
                                                 </div>
                                             {% endfor %}
                                         {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <!-- End Resume Area -->
 
+    <!-- Start Testimonia Area  -->
+    {%  if page.testimonial.count >= 1 %}
+    <div class="rn-testimonial-area rn-section-gap section-separator" id="testimonial">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="100" data-aos-once="true" class="section-title text-center">
+                            <span class="subtitle">What Clients Say</span>
+                            <h2 class="title">Testimonial</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" data-aos="fade-up" data-aos-duration="500" data-aos-delay="300" data-aos-once="true">
+                    <div class="col-lg-12">
+                        <div class="testimonial-activation testimonial-pb mb--30">
+                                {% for item in page.testimonial.all %}
+                                <!-- Start Single testiminail -->
+                                <div class="testimonial mt--50 mt_md--40 mt_sm--40">
+                                    <div class="inner">
+                                        <div class="card-info">
+                                            <div class="card-thumbnail">
+                                                {% image item.thumbnail fill-335x252 %}
+{#                                                <img src="assets/images/testimonial/final-home--1st.png" alt="Testimonial-image">#}
+                                            </div>
+                                            <div class="card-content">
+                                                <span class="subtitle mt--10">{{ item.subtitle }}</span>
+                                                <h3 class="title">{{ item.title }}</h3>
+                                                <span class="~">{{ item.designation }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="card-description">
+                                            <div class="title-area">
+                                                <div class="title-info">
+                                                    <h3 class="title">{{ item.app_name }}</h3>
+                                                    <span class="date">{{ item.app_date}}</span>
+                                                </div>
+                                                <div class="rating">
+                                                    {{ item.rating }}
+                                                    <img src="{% static 'assets/images/icons/rating.png' %}" alt="rating-image">
+{#                                                    <img src="assets/images/icons/rating.png" alt="rating-image">#}
+{#                                                    <img src="assets/images/icons/rating.png" alt="rating-image">#}
+{#                                                    <img src="assets/images/icons/rating.png" alt="rating-image">#}
+{#                                                    <img src="assets/images/icons/rating.png" alt="rating-image">#}
+                                                </div>
+                                            </div>
+                                            <div class="seperator"></div>
+                                            <p class="discription">
+                                                Maecenas finibus nec sem ut imperdiet. Ut tincidunt est ac dolor aliquam
+                                                sodales. Phasellus sed mauris hendrerit, laoreet sem in, lobortis mauris
+                                                hendrerit ante. Ut tincidunt est ac dolor aliquam sodales phasellus smauris
+                                                .
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--End Single testiminail -->
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
 
             </div>
         </div>
-        <!-- End Resume Area -->
+    {% endif %}
     </main>
 
     <!-- Start Main Page Wrapper -->
