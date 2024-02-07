@@ -8,6 +8,7 @@ from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField, BlockField
 from wagtail.admin.panels import FieldPanel, InlinePanel, MultiFieldPanel
 from django.core.validators import MaxValueValidator, MinValueValidator
+from phonenumber_field.modelfields import PhoneNumberField
 
 from wagtail.search import index
 
@@ -24,6 +25,10 @@ class HomePage(Page):
     intro = RichTextField(blank=True)
     years_of_exp = RichTextField(default=0)
     profile_pic = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', default=1)
+    phone = RichTextField(blank=True)
+    email = RichTextField(blank=True)
+    contact_description = RichTextField(blank=True)
+    contact_img = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+', default=1)
     # facebook_url = RichTextField(blank=True),
     # instagram_url = RichTextField(blank=True)
     # linkedin_url = RichTextField(blank=True)
@@ -37,6 +42,7 @@ class HomePage(Page):
         FieldPanel('profile_pic'),
         FieldPanel('years_of_exp'),
         FieldPanel('name'), FieldPanel('role1'), FieldPanel('role2'), FieldPanel('role3'),
+        FieldPanel('phone'), FieldPanel('email'), FieldPanel('contact_description'), FieldPanel('contact_img'),
         InlinePanel('logo', label="Logo Image"),
         InlinePanel('socialmedia', label='SocialMedia'),
         InlinePanel('skills', label='Skills'),
@@ -45,7 +51,8 @@ class HomePage(Page):
         InlinePanel('education', label='Education Details'),
         InlinePanel('professional', label='Professional Skills'),
         InlinePanel('experience', label='Experience'),
-        InlinePanel('testimonial', label='Testimonial')
+        InlinePanel('testimonial', label='Testimonial'),
+        InlinePanel('clients', label='Clients')
     ]
 
     def clean(self):
@@ -70,6 +77,12 @@ class HomePage(Page):
         self.role2 = re.sub(r'<.*?>', '', self.role2)
         self.role3 = self.role3.strip()
         self.role3 = re.sub(r'<.*?>', '', self.role3)
+        self.phone = self.phone.strip()
+        self.phone = re.sub(r'<.*?>', '', self.phone)
+        self.email = self.email.strip()
+        self.email = re.sub(r'<.*?>', '', self.email)
+        self.contact_description = self.contact_description.strip()
+        self.contact_description = re.sub(r'<.*?>', '', self.contact_description)
 
 
 class BlogPageGalleryImage(Orderable):
@@ -238,3 +251,32 @@ class Testimonial(Orderable):
         self.app_date = re.sub(r'<.*?>', '', self.app_date)
         self.description = self.description.strip()
         self.description = re.sub(r'<.*?>', '', self.description)
+
+
+class Clients(Orderable):
+    page = ParentalKey(HomePage, on_delete=models.CASCADE, related_name='clients')
+    client_logo = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
+    client_name = RichTextField()
+    client_url = RichTextField()
+    language = RichTextField()
+
+    panel = [FieldPanel('client_logo'), FieldPanel('client_name'), FieldPanel('client_url'), FieldPanel('language')]
+
+    def clean(self):
+        self.client_name = self.client_name.strip()  # Remove leading and trailing whitespace
+        self.client_name = re.sub(r'<.*?>', '', self.client_name)  # Remove HTML tags
+        self.client_url = self.client_url.strip()
+        self.client_url = re.sub(r'<.*?>', '', self.client_url)
+        self.language = self.language.strip()
+        self.language = re.sub(r'<.*?>', '', self.language)
+
+
+class ContactUs(models.Model):
+    your_name = models.CharField(max_length=250)
+    phone_number = PhoneNumberField()
+    email = models.EmailField()
+    subject = models.CharField(max_length=2500)
+    message = models.TextField()
+
+    class Meta:
+        db_table = 'ContactUs'

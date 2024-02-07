@@ -34,11 +34,17 @@
                             {%  if page.whatido.count >= 1 %}
                                 <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
                             {% endif %}
-                            <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#resume">Resume</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#clients">Clients</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#blog">blog</a></li>
+                            {%  if page.portfolio.count >= 1 %}
+                                <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+                            {%  endif %}
+                            {%  if page.education.count >= 1 or page.professional.count >= 1 or page.experience.count >= 1 %}
+                                <li class="nav-item"><a class="nav-link" href="#resume">Resume</a></li>
+                            {% endif %}
+                            {%  if page.clients.count >= 1 %}
+                                <li class="nav-item"><a class="nav-link" href="#clients">Clients</a></li>
+                            {% endif %}
+{#                            <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>#}
+{#                            <li class="nav-item"><a class="nav-link" href="#blog">blog</a></li>#}
 {#                            <li class="nav-item"><a class="nav-link" href="#contacts">Contact</a></li>#}
                         </ul>
                         <!-- End Mainmanu Nav -->
@@ -493,10 +499,168 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     {% endif %}
+    <!-- End Testimonia Area  -->
+
+    <!-- Start Client Area -->
+        <!-- Start Client Area -->
+        {%  if page.clients.count >= 1 %}
+        <!-- Start Client Area -->
+        <div class="rn-client-area rn-section-gap section-separator" id="clients">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title">
+                            <span class="subtitle">Popular Clients</span>
+                            <h2 class="title">Awesome Clients</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row--25 mt--50 mt_md--40 mt_sm--40">
+                    <div class="col-lg-4">
+                        <div class="d-flex flex-wrap align-content-start h-100">
+                            <div class="position-sticky clients-wrapper sticky-top rbt-sticky-top-adjust">
+                                <ul class="nav tab-navigation-button flex-column nav-pills me-3" id="v-pills-tab" role="tablist">
+                                    {% for client in page.clients.all %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="v-pills-home-tab" data-bs-toggle="tab" href="#v-pills-{{ client.language }}" role="tab" aria-controls="{{ client.language }}" aria-selected="true">{{ client.language }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <div class="tab-area">
+                            <div class="d-flex align-items-start">
+                                <div class="tab-content" id="v-pills-tabContent">
+                                    {% for client in page.clients.all %}
+                                        <div class="tab-pane fade show active" id="v-pills-{{ client.language }}" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                            <div class="client-card">
+
+                                                <!-- Start Single Brand  -->
+                                                <div class="main-content">
+                                                    <div class="inner text-center">
+                                                        <div class="thumbnail">
+                                                            <a href="{{ client.client_url}}">{% image client.client_logo fill-800x600 %}</a>
+                                                        </div>
+                                                        <div class="seperator"></div>
+                                                        <div class="client-name"><span><a href="{{ client.client_url }}">{{ client.client_name }}</a></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- End Single Brand  -->
+                                            </div>
+                                        </div>
+                                    {%  endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End client section -->
+        {% endif %}
+        <!-- End client section -->
+
+        <!-- Start Contact section -->
+        <div class="rn-contact-area rn-section-gap section-separator" id="contacts">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title text-center">
+                            <span class="subtitle">Contact</span>
+                            <h2 class="title">Contact With Me</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt--50 mt_md--40 mt_sm--40 mt-contact-sm">
+                    <div class="col-lg-5">
+                        <div class="contact-about-area">
+                            <div class="thumbnail">
+                                {% image page.contact_img fill-64x64 %}
+                            </div>
+                            <div class="title-area">
+                                <h4 class="title">{{ page.name }}</h4>
+{#                                <span>Chief Operating Officer</span>#}
+                            </div>
+                            <div class="description">
+                                <p>{{ page.contact_description }}
+                                </p>
+                                <span class="phone">Phone: <a href="tel:{{ page.phone }}">{{ page.phone }}</a></span>
+                                <span class="mail">Email: <a href="mailto:{{ page.email}}">{{ page.email}}</a></span>
+                            </div>
+                            <div class="social-area">
+                                <div class="name">FIND WITH ME</div>
+                                <div class="social-icone">
+                                    {%  for item in page.socialmedia.all %}
+                                        <a href="{{ item.url }}">{% image item.logo fill-32x32-c100 %}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-aos-delay="600" class="col-lg-7 contact-input">
+                        <div class="contact-form-wrapper">
+                            <div class="introduce">
+
+                                <form class="rnt-contact-form rwt-dynamic-form row" id="contact-form" method="POST" action="mail.php">
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="contact-name">Your Name</label>
+                                            <input class="form-control form-control-lg" name="contact-name" id="contact-name" type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group">
+                                            <label for="contact-phone">Phone Number</label>
+                                            <input class="form-control" name="contact-phone" id="contact-phone" type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="contact-email">Email</label>
+                                            <input class="form-control form-control-sm" id="contact-email" name="contact-email" type="email">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="subject">subject</label>
+                                            <input class="form-control form-control-sm" id="subject" name="subject" type="text">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <label for="contact-message">Your Message</label>
+                                            <textarea name="contact-message" id="contact-message" cols="30" rows="10"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <button name="submit" type="submit" id="submit" class="rn-btn">
+                                            <span>SEND MESSAGE</span>
+                                            <i data-feather="arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Contuct section -->
     </main>
 
     <!-- Start Main Page Wrapper -->
