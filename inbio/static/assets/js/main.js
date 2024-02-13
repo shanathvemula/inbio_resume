@@ -64,7 +64,7 @@
 				_self.closest('div').find('button[type="submit"]').attr('disabled', 'disabled');
 				var data = $(this).serialize();
 				$.ajax({
-					url: 'mail.php',
+					url: './contact/',
 					type: "post",
 					dataType: 'json',
 					data: data,

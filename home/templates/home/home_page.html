@@ -591,8 +591,7 @@
 {#                                <span>Chief Operating Officer</span>#}
                             </div>
                             <div class="description">
-                                <p>{{ page.contact_description }}
-                                </p>
+                                {{ page.contact_description }}
                                 <span class="phone">Phone: <a href="tel:{{ page.phone }}">{{ page.phone }}</a></span>
                                 <span class="mail">Email: <a href="mailto:{{ page.email}}">{{ page.email}}</a></span>
                             </div>
@@ -610,8 +609,8 @@
                         <div class="contact-form-wrapper">
                             <div class="introduce">
 
-                                <form class="rnt-contact-form rwt-dynamic-form row" id="contact-form" method="POST" action="mail.php">
-
+                                <form class="rnt-contact-form rwt-dynamic-form row" id="contact-form" method="POST" action="./contact/">
+                                    {% csrf_token %}
                                     <div class="col-lg-6">
                                         <div class="form-group">
                                             <label for="contact-name">Your Name</label>

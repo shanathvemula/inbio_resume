@@ -3,6 +3,7 @@ import re
 from django.db import models
 
 from modelcluster.fields import ParentalKey
+from wagtail.contrib.forms.models import AbstractFormField, AbstractEmailForm
 
 from wagtail.models import Page, Orderable
 from wagtail.fields import RichTextField, BlockField
@@ -278,5 +279,19 @@ class ContactUs(models.Model):
     subject = models.CharField(max_length=2500)
     message = models.TextField()
 
+    def clean(self):
+        self.your_name = self.your_name.strip()  # Remove leading and trailing whitespace
+        self.your_name = re.sub(r'<.*?>', '', self.your_name)  # Remove HTML tags
+        self.phone_number = self.phone_number.strip()
+        self.phone_number = re.sub(r'<.*?>', '', self.phone_number)
+        self.email = self.email.strip()
+        self.email = re.sub(r'<.*?>', '', self.email)
+        self.subject = self.subject.strip()
+        self.subject = re.sub(r'<.*?>', '', self.subject)
+        self.message = self.message.strip()
+        self.message = re.sub(r'<.*?>', '', self.message)
+
+
     class Meta:
         db_table = 'ContactUs'
+
