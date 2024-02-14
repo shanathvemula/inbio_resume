@@ -19,11 +19,14 @@ def contact_form(request):
     # content = data['contact-message'][0]
 
     message = MIMEMultipart()
-    message['From'] = 'from@gmail.com'
+    message['From'] = 'sender@gmail.com'
     # message['cc'] = ccemails
     message['To'] = data['contact-email'][0]
-    message['Subject'] = data['subject'][0]
-    message.attach(MIMEText("<h1>"+data['contact-message'][0]+"<\h1>", "html"))
+    message['Subject'] = "Thank you for contacting me"
+    with open('home/templates/thank_you.html', 'r') as file:
+        body = file.read()
+    body = body.replace('{{ fullname }}', data['contact-name'][0])
+    message.attach(MIMEText(body, "html"))
     text = message.as_string()
     context = ssl.create_default_context()
     with smtplib.SMTP("smtp-mail.outlook.com", 587) as server:
