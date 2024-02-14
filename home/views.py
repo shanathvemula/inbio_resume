@@ -18,16 +18,36 @@ def contact_form(request):
     # subject = data['subject'][0]
     # content = data['contact-message'][0]
 
+    ############################## creating message for the thank you mail ##############################
     message = MIMEMultipart()
     message['From'] = 'sender@gmail.com'
     # message['cc'] = ccemails
     message['To'] = data['contact-email'][0]
     message['Subject'] = "Thank you for contacting me"
     with open('home/templates/thank_you.html', 'r') as file:
-        body = file.read()
-    body = body.replace('{{ fullname }}', data['contact-name'][0])
-    message.attach(MIMEText(body, "html"))
-    text = message.as_string()
+        thank_you_body = file.read()
+        file.close()
+    thank_you_body = thank_you_body.replace('{{ fullname }}', data['contact-name'][0])
+    message.attach(MIMEText(thank_you_body, "html"))
+    thank_you_text = message.as_string()
+
+    ############################## creating message for sending contact text to mail ##############################
+    message2 = MIMEMultipart()
+    message2['From'] = 'sender@gmail.com'
+    message2['To'] = 'contact_recevier@gmail.com'
+    message2['Subject'] = "Contact From is submitted from Portfolio"
+    with open('home/templates/contact_from_protfolio.html', 'r') as contact_file:
+        contact_body = contact_file.read()
+        contact_file.close()
+    contact_body = contact_body.replace('{{ contact-name }}', data['contact-name'][0]).replace('{{ contact-phone }}',
+                                                                                               data['contact-phone'][
+                                                                                                   0]).replace(
+        '{{ contact-email }}', data['contact-email'][0]).replace('{{ subject }}', data['subject'][0]).replace(
+        '{{ contact-message }}', data['contact-message'][0])
+    message2.attach(MIMEText(contact_body, "html"))
+    contact_text = message2.as_string()
+
+    ############################## Sending mails ##############################
     context = ssl.create_default_context()
     with smtplib.SMTP("smtp-mail.outlook.com", 587) as server:
         server.ehlo()
@@ -35,7 +55,8 @@ def contact_form(request):
         server.ehlo()
         server.login(message['From'], 'password')
         print("login successfull")
-        server.sendmail(data['contact-email'][0], data['contact-email'][0], text)
+        server.sendmail(data['contact-email'][0], data['contact-email'][0], thank_you_text)
+        server.sendmail(message2['From'], message2['To'], contact_text)
         print("Mail Sent Successfully")
         server.quit()
 
