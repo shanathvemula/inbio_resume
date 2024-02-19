@@ -27,7 +27,7 @@ def contact_form(request):
     # print(html_message)
     plain_message = strip_tags(html_message)
     # print(plain_message)
-    send_mail(subject=subject, message=plain_message.lstrip(), from_email='shanathvemula@outlook.com',
+    send_mail(subject=subject, message=plain_message.lstrip(), from_email='sender@outlook.com',
               recipient_list=emails)
     return HttpResponse("OK")
 
